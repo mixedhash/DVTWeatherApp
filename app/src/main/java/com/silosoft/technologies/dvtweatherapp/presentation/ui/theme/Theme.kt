@@ -1,4 +1,4 @@
-package com.silosoft.technologies.dvtweatherapp.ui.theme
+package com.silosoft.technologies.dvtweatherapp.presentation.ui.theme
 
 import android.app.Activity
 import android.os.Build

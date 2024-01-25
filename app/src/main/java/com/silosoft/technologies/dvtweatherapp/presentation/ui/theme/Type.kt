@@ -1,4 +1,4 @@
-package com.silosoft.technologies.dvtweatherapp.ui.theme
+package com.silosoft.technologies.dvtweatherapp.presentation.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

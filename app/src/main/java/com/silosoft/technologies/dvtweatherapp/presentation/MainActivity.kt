@@ -1,16 +1,17 @@
-package com.silosoft.technologies.dvtweatherapp
+package com.silosoft.technologies.dvtweatherapp.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.silosoft.technologies.dvtweatherapp.ui.theme.DVTWeatherAppTheme
+import androidx.navigation.compose.rememberNavController
+import com.silosoft.technologies.dvtweatherapp.presentation.nav.BottomNavBar
+import com.silosoft.technologies.dvtweatherapp.presentation.nav.NavigationHost
+import com.silosoft.technologies.dvtweatherapp.presentation.ui.theme.DVTWeatherAppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,25 +23,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    val navController = rememberNavController()
+
+                    Scaffold(bottomBar = { BottomNavBar(navController) }) {
+                        NavigationHost(navController, it)
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    DVTWeatherAppTheme {
-        Greeting("Android")
     }
 }
