@@ -21,6 +21,9 @@ Weather application that displays current weather at the user's location and a 5
 - [Detekt](https://github.com/detekt/detekt) for static analysis
 - [Kover](https://github.com/Kotlin/kotlinx-kover) for Kotlin code coverage
 - [Retrofit](https://github.com/square/retrofit) for handling API calls with [Moshi](https://github.com/square/moshi) for parsing JSON
+- [Dagger Hilt](https://dagger.dev/hilt/) for dependency injection
+- [Room](https://developer.android.com/jetpack/androidx/releases/room) for local storage
+- [KSP](https://github.com/google/ksp) for annotation processing
 - Github actions for the CI pipeline
 
 ## Setup

@@ -7,9 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.silosoft.technologies.dvtweatherapp.Constants.FAVOURITE_BOTTOM_TAB_ROUTE
-import com.silosoft.technologies.dvtweatherapp.Constants.HOME_BOTTOM_TAB_ROUTE
-import com.silosoft.technologies.dvtweatherapp.Constants.MAP_BOTTOM_TAB_ROUTE
+import com.silosoft.technologies.dvtweatherapp.presentation.Constants.FAVOURITE_BOTTOM_TAB_ROUTE
+import com.silosoft.technologies.dvtweatherapp.presentation.Constants.HOME_BOTTOM_TAB_ROUTE
+import com.silosoft.technologies.dvtweatherapp.presentation.Constants.MAP_BOTTOM_TAB_ROUTE
 import com.silosoft.technologies.dvtweatherapp.R
 
 @Composable
