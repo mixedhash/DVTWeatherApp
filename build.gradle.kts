@@ -2,4 +2,10 @@
 plugins {
     id("com.android.application") version "8.2.1" apply false
     id("org.jetbrains.kotlin.android") version "1.9.0" apply false
+    id("io.gitlab.arturbosch.detekt") version "1.23.4"
+}
+
+detekt {
+    toolVersion = "1.23.3"
+    config.setFrom(file("config/detekt/detekt.yml"))
 }
