@@ -31,4 +31,4 @@ This section will mark my steps used in solving this assignment:
 
 1. Examined requirements and chose my tech stack and architecture.
 2. Analysing API's response through Postman and adding keys as secrets.
-3.
+3. Prepared CI pipeline.
