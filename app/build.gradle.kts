@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -11,6 +13,19 @@ android {
     namespace = "com.silosoft.technologies.dvtweatherapp"
     compileSdk = 34
 
+    val properties = Properties()
+
+    val localPropertiesFile = project.rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.inputStream().use {
+            properties.load(it)
+        }
+    } else {
+        System.getenv().forEach { (key, value) ->
+            properties.setProperty(key, value)
+        }
+    }
+
     defaultConfig {
         applicationId = "com.silosoft.technologies.dvtweatherapp"
         minSdk = 28
@@ -22,6 +37,12 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "OPEN_WEATHER_API_KEY", "\"${properties["OPEN_WEATHER_API_KEY"]}\"")
+        buildConfigField("String", "FORECAST_ENDPOINT_BASE_URL", "\"${properties["FORECAST_ENDPOINT_BASE_URL"]}\"")
+        buildConfigField("String", "WEATHER_ENDPOINT_BASE_URL", "\"${properties["WEATHER_ENDPOINT_BASE_URL"]}\"")
+        buildConfigField("String", "GOOGLE_MAPS_APIS_KEY", "\"${properties["GOOGLE_MAPS_APIS_KEY"]}\"")
+        buildConfigField("String", "NEARBYSEARCH_ENDPOINT_BASE_URL", "\"${properties["NEARBYSEARCH_ENDPOINT_BASE_URL"]}\"")
     }
 
     buildTypes {
@@ -42,6 +63,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.8"
@@ -58,9 +80,9 @@ dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    implementation("androidx.activity:activity-compose:1.8.2")
 
     // Compose
+    implementation("androidx.activity:activity-compose:1.8.2")
     implementation(platform("androidx.compose:compose-bom:2023.10.01"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
@@ -72,6 +94,10 @@ dependencies {
 
     // Work runtime?
     implementation("androidx.work:work-runtime-ktx:2.9.0")
+
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
 
     // Moshi
     implementation("com.squareup.moshi:moshi:1.15.0")
