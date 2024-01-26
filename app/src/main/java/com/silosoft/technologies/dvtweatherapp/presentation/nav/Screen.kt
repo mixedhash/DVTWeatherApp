@@ -5,7 +5,7 @@ import com.silosoft.technologies.dvtweatherapp.presentation.Constants.HOME_BOTTO
 import com.silosoft.technologies.dvtweatherapp.presentation.Constants.MAP_BOTTOM_TAB_ROUTE
 
 enum class Screen(val route: String) {
-    MainScreen(HOME_BOTTOM_TAB_ROUTE),
+    HomeScreen(HOME_BOTTOM_TAB_ROUTE),
     FavouriteScreen(FAVOURITE_BOTTOM_TAB_ROUTE),
     MapScreen(MAP_BOTTOM_TAB_ROUTE)
 }

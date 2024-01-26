@@ -10,13 +10,19 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.silosoft.technologies.dvtweatherapp.presentation.nav.BottomNavBar
+import com.silosoft.technologies.dvtweatherapp.presentation.nav.NavigationHost
 import com.silosoft.technologies.dvtweatherapp.presentation.ui.theme.DVTWeatherAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -57,11 +63,19 @@ class MainActivity : ComponentActivity() {
                             verticalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             if (areGranted) {
-                                Text(text = "${currentLocation?.latitude ?: 0.0} ${currentLocation?.longitude ?: 0.0}")
-                                Button(
-                                    onClick = { viewModel.getCurrentLocation() }
+                                Surface(
+                                    modifier = Modifier.fillMaxSize(),
+                                    color = MaterialTheme.colorScheme.background
                                 ) {
-                                    Text(text = "Get current location")
+                                    val navController = rememberNavController()
+
+                                    Scaffold(bottomBar = { BottomNavBar(navController) }) { paddings ->
+                                        if (currentLocation != null) {
+                                            NavigationHost(navController, paddings, currentLocation)
+                                        } else {
+                                            Text(text = "Couldn't retrieve location, something went wrong!")
+                                        }
+                                    }
                                 }
                             } else {
                                 Text(text = "We need location permissions for this application.")
@@ -73,17 +87,6 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     }
-
-//                Surface(
-//                    modifier = Modifier.fillMaxSize(),
-//                    color = MaterialTheme.colorScheme.background
-//                ) {
-//                    val navController = rememberNavController()
-//
-//                    Scaffold(bottomBar = { BottomNavBar(navController) }) {
-//                        NavigationHost(navController, it)
-//                    }
-//                }
                 }
             }
         }

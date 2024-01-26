@@ -39,10 +39,9 @@ android {
         }
 
         buildConfigField("String", "OPEN_WEATHER_API_KEY", "\"${properties["OPEN_WEATHER_API_KEY"]}\"")
-        buildConfigField("String", "FORECAST_ENDPOINT_BASE_URL", "\"${properties["FORECAST_ENDPOINT_BASE_URL"]}\"")
-        buildConfigField("String", "WEATHER_ENDPOINT_BASE_URL", "\"${properties["WEATHER_ENDPOINT_BASE_URL"]}\"")
+        buildConfigField("String", "OPEN_WEATHER_BASE_URL", "\"${properties["OPEN_WEATHER_BASE_URL"]}\"")
         buildConfigField("String", "GOOGLE_MAPS_APIS_KEY", "\"${properties["GOOGLE_MAPS_APIS_KEY"]}\"")
-        buildConfigField("String", "NEARBYSEARCH_ENDPOINT_BASE_URL", "\"${properties["NEARBYSEARCH_ENDPOINT_BASE_URL"]}\"")
+        buildConfigField("String", "NEARBYSEARCH_BASE_URL", "\"${properties["NEARBYSEARCH_BASE_URL"]}\"")
     }
 
     buildTypes {
@@ -116,6 +115,9 @@ dependencies {
 
     // Room
     ksp("androidx.room:room-compiler:2.6.1")
+
+    // Timber for logging
+    implementation("com.jakewharton.timber:timber:5.0.1")
 
     // Compose test
     debugImplementation("androidx.compose.ui:ui-tooling")
