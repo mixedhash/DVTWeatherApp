@@ -26,7 +26,7 @@ class GetForecastUseCase @Inject constructor(
                     ForecastDay(
                         dayOfWeek = convertToDayOfWeek(day.dtTxt),
                         weatherType = day.weather[0].main,
-                        temp = day.main.temp
+                        temp = day.main.temp.toInt()
                     )
                 )
             }

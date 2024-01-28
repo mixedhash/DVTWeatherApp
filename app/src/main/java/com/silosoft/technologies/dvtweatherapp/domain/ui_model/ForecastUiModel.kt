@@ -7,5 +7,5 @@ data class ForecastUiModel(
 data class ForecastDay(
     val dayOfWeek: String,
     val weatherType: String,
-    val temp: Double
+    val temp: Int
 )
