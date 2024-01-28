@@ -88,7 +88,6 @@ class MainActivity : ComponentActivity() {
                                             NavigationHost(
                                                 navHostController = navController,
                                                 paddingValues = paddings,
-                                                displayErrorToast = { viewModel.onEvent(MainViewModel.Event.OnDisplayErrorToast) },
                                                 weatherState = weatherState.value,
                                                 forecastState = forecastState.value
                                             )

@@ -17,7 +17,6 @@ import com.silosoft.technologies.dvtweatherapp.presentation.ui.screens.MapScreen
 fun NavigationHost(
     navHostController: NavHostController,
     paddingValues: PaddingValues,
-    displayErrorToast: () -> Unit,
     weatherState: WeatherUiModel?,
     forecastState: ForecastUiModel?
 
