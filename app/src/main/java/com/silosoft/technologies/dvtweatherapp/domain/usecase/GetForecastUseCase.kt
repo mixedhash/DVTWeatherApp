@@ -1,22 +1,16 @@
 package com.silosoft.technologies.dvtweatherapp.domain.usecase
 
-import android.content.Context
-import android.widget.Toast
 import com.silosoft.technologies.dvtweatherapp.data.Result
 import com.silosoft.technologies.dvtweatherapp.domain.repository.OpenWeatherRepository
 import com.silosoft.technologies.dvtweatherapp.domain.model.ForecastDay
 import com.silosoft.technologies.dvtweatherapp.domain.model.ForecastUiModel
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale
 import javax.inject.Inject
 
 class GetForecastUseCase @Inject constructor(
-    @ApplicationContext private val context: Context,
-    private val openWeatherRepository: OpenWeatherRepository
+    private val openWeatherRepository: OpenWeatherRepository,
 ) {
     suspend fun execute(lat: String, lon: String): ForecastUiModel? {
         val result = openWeatherRepository.getForecast(lat, lon)
@@ -36,9 +30,6 @@ class GetForecastUseCase @Inject constructor(
             }
             is Result.Error -> {
                 Timber.e(result.error)
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "Something went wrong!", Toast.LENGTH_LONG).show()
-                }
                 null
             }
         }

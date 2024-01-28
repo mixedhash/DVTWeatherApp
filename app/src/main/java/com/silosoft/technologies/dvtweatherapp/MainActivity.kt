@@ -1,6 +1,7 @@
 package com.silosoft.technologies.dvtweatherapp
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -46,7 +47,7 @@ class MainActivity : ComponentActivity() {
 
                 LaunchedEffect(key1 = locationPermissions.allPermissionsGranted) {
                     if (locationPermissions.allPermissionsGranted) {
-                        viewModel.getLocation()
+                        viewModel.onEvent(MainViewModel.Event.OnFetchLocation)
                     }
                 }
 
@@ -54,8 +55,8 @@ class MainActivity : ComponentActivity() {
 
                 LaunchedEffect(key1 = currentLocation.value != null) {
                     if (currentLocation.value != null) {
-                        viewModel.getWeather()?.join()
-                        viewModel.getForecast()?.join()
+                        viewModel.onEvent(MainViewModel.Event.OnFetchWeatherData)
+                        viewModel.onEvent(MainViewModel.Event.OnFetchForecastData)
                     }
                 }
 
@@ -79,12 +80,15 @@ class MainActivity : ComponentActivity() {
 
                                     Scaffold(bottomBar = { BottomNavBar(navController) }) { paddings ->
                                         if (currentLocation.value != null) {
-                                            val weatherState = viewModel.weatherState.collectAsState()
-                                            val forecastState = viewModel.forecastState.collectAsState()
+                                            val weatherState =
+                                                viewModel.weatherState.collectAsState()
+                                            val forecastState =
+                                                viewModel.forecastState.collectAsState()
 
                                             NavigationHost(
                                                 navHostController = navController,
                                                 paddingValues = paddings,
+                                                displayErrorToast = { viewModel.onEvent(MainViewModel.Event.OnDisplayErrorToast) },
                                                 weatherState = weatherState.value,
                                                 forecastState = forecastState.value
                                             )
@@ -104,7 +108,15 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
+
+                if (viewModel.displayErrorToast.collectAsState().value) {
+                    displayErrorToast()
+                    viewModel.onEvent(MainViewModel.Event.OnDisplayErrorToastFinished)
+                }
             }
         }
     }
+
+    private fun displayErrorToast() =
+        Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show()
 }

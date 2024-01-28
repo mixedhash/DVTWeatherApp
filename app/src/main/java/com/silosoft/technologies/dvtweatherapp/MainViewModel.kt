@@ -24,12 +24,13 @@ class MainViewModel @Inject constructor(
     val locationState: MutableStateFlow<Location?> = MutableStateFlow(null)
     val weatherState: MutableStateFlow<WeatherUiModel?> = MutableStateFlow(null)
     val forecastState: MutableStateFlow<ForecastUiModel?> = MutableStateFlow(null)
+    val displayErrorToast: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
-    fun getLocation() = viewModelScope.launch(Dispatchers.IO) {
+    private fun getLocation() = viewModelScope.launch(Dispatchers.IO) {
         locationState.value = locationRepository.getCurrentLocation()
     }
 
-    fun getWeather() = locationState.value?.let { location ->
+    private fun getWeather() = locationState.value?.let { location ->
         viewModelScope.launch(Dispatchers.IO) {
             weatherState.value = weatherUseCase.execute(
                 lat = location.latitude.toString(),
@@ -38,12 +39,30 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun getForecast() = locationState.value?.let { location ->
+    private fun getForecast() = locationState.value?.let { location ->
         viewModelScope.launch(Dispatchers.IO) {
             forecastState.value = forecastUseCase.execute(
                 lat = location.latitude.toString(),
                 lon = location.longitude.toString()
             )
         }
+    }
+
+    fun onEvent(event: Event) {
+        when (event) {
+            is Event.OnFetchLocation -> getLocation()
+            is Event.OnFetchWeatherData -> getWeather()
+            is Event.OnFetchForecastData -> getForecast()
+            is Event.OnDisplayErrorToast -> displayErrorToast.value = true
+            is Event.OnDisplayErrorToastFinished -> displayErrorToast.value = false
+        }
+    }
+
+    sealed interface Event {
+        data object OnFetchLocation : Event
+        data object OnFetchWeatherData : Event
+        data object OnFetchForecastData : Event
+        data object OnDisplayErrorToast : Event
+        data object OnDisplayErrorToastFinished : Event
     }
 }
