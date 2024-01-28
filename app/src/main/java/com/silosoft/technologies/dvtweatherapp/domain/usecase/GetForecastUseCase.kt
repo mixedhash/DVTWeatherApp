@@ -4,9 +4,8 @@ import com.silosoft.technologies.dvtweatherapp.data.Result
 import com.silosoft.technologies.dvtweatherapp.domain.repository.OpenWeatherRepository
 import com.silosoft.technologies.dvtweatherapp.domain.model.ForecastDay
 import com.silosoft.technologies.dvtweatherapp.domain.model.ForecastUiModel
+import com.silosoft.technologies.dvtweatherapp.extensions.convertToDayOfWeek
 import timber.log.Timber
-import java.text.SimpleDateFormat
-import java.util.Locale
 import javax.inject.Inject
 
 class GetForecastUseCase @Inject constructor(
@@ -20,7 +19,7 @@ class GetForecastUseCase @Inject constructor(
                 result.data.list.forEach { day ->
                     forecastDays.add(
                         ForecastDay(
-                            dayOfWeek = convertToDayOfWeek(day.dtTxt),
+                            dayOfWeek = day.dtTxt.convertToDayOfWeek(),
                             weatherType = day.weather[0].main,
                             temp = day.main.temp.toInt()
                         )
@@ -33,12 +32,5 @@ class GetForecastUseCase @Inject constructor(
                 null
             }
         }
-    }
-
-    private fun convertToDayOfWeek(timestamp: String): String {
-        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-        val date = formatter.parse(timestamp)
-        val dayOfWeekFormatter = SimpleDateFormat("EEEE", Locale.getDefault())
-        return date?.let { dayOfWeekFormatter.format(it) } ?: ""
     }
 }
