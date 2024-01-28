@@ -1,8 +1,8 @@
 package com.silosoft.technologies.dvtweatherapp.domain.api
 
 import com.silosoft.technologies.dvtweatherapp.BuildConfig
-import com.silosoft.technologies.dvtweatherapp.data.response_model.forecast.ForecastResponse
-import com.silosoft.technologies.dvtweatherapp.data.response_model.weather.WeatherResponse
+import com.silosoft.technologies.dvtweatherapp.data.response.forecast.ForecastResponse
+import com.silosoft.technologies.dvtweatherapp.data.response.weather.WeatherResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

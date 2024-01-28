@@ -7,8 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.silosoft.technologies.dvtweatherapp.domain.ui_model.ForecastUiModel
-import com.silosoft.technologies.dvtweatherapp.domain.ui_model.WeatherUiModel
+import com.silosoft.technologies.dvtweatherapp.domain.model.ForecastUiModel
+import com.silosoft.technologies.dvtweatherapp.domain.model.WeatherUiModel
 import com.silosoft.technologies.dvtweatherapp.presentation.ui.screens.FavouriteScreen
 import com.silosoft.technologies.dvtweatherapp.presentation.ui.screens.HomeScreen
 import com.silosoft.technologies.dvtweatherapp.presentation.ui.screens.MapScreen

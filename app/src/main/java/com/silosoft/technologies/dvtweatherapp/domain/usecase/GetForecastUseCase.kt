@@ -4,8 +4,8 @@ import android.content.Context
 import android.widget.Toast
 import com.silosoft.technologies.dvtweatherapp.data.Result
 import com.silosoft.technologies.dvtweatherapp.domain.repository.OpenWeatherRepository
-import com.silosoft.technologies.dvtweatherapp.domain.ui_model.ForecastDay
-import com.silosoft.technologies.dvtweatherapp.domain.ui_model.ForecastUiModel
+import com.silosoft.technologies.dvtweatherapp.domain.model.ForecastDay
+import com.silosoft.technologies.dvtweatherapp.domain.model.ForecastUiModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

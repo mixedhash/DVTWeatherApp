@@ -4,8 +4,8 @@ import android.location.Location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.silosoft.technologies.dvtweatherapp.domain.repository.LocationRepository
-import com.silosoft.technologies.dvtweatherapp.domain.ui_model.ForecastUiModel
-import com.silosoft.technologies.dvtweatherapp.domain.ui_model.WeatherUiModel
+import com.silosoft.technologies.dvtweatherapp.domain.model.ForecastUiModel
+import com.silosoft.technologies.dvtweatherapp.domain.model.WeatherUiModel
 import com.silosoft.technologies.dvtweatherapp.domain.usecase.GetForecastUseCase
 import com.silosoft.technologies.dvtweatherapp.domain.usecase.GetWeatherUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -1,8 +1,8 @@
 package com.silosoft.technologies.dvtweatherapp.data.implementations
 
 import com.silosoft.technologies.dvtweatherapp.data.Result
-import com.silosoft.technologies.dvtweatherapp.data.response_model.forecast.ForecastResponse
-import com.silosoft.technologies.dvtweatherapp.data.response_model.weather.WeatherResponse
+import com.silosoft.technologies.dvtweatherapp.data.response.forecast.ForecastResponse
+import com.silosoft.technologies.dvtweatherapp.data.response.weather.WeatherResponse
 import com.silosoft.technologies.dvtweatherapp.domain.api.OpenWeatherApi
 import com.silosoft.technologies.dvtweatherapp.domain.repository.OpenWeatherRepository
 import okio.IOException

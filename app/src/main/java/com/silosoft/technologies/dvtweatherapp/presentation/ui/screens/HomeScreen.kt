@@ -26,9 +26,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.silosoft.technologies.dvtweatherapp.R
-import com.silosoft.technologies.dvtweatherapp.domain.ui_model.ForecastDay
-import com.silosoft.technologies.dvtweatherapp.domain.ui_model.ForecastUiModel
-import com.silosoft.technologies.dvtweatherapp.domain.ui_model.WeatherUiModel
+import com.silosoft.technologies.dvtweatherapp.domain.model.ForecastDay
+import com.silosoft.technologies.dvtweatherapp.domain.model.ForecastUiModel
+import com.silosoft.technologies.dvtweatherapp.domain.model.WeatherUiModel
 import com.silosoft.technologies.dvtweatherapp.presentation.ui.theme.CloudyGray
 import com.silosoft.technologies.dvtweatherapp.presentation.ui.theme.RainyMatte
 import com.silosoft.technologies.dvtweatherapp.presentation.ui.theme.SunnyGreen
@@ -45,6 +45,7 @@ fun HomeScreen(
                 .fillMaxSize()
                 .background(getBackgroundColor(weatherType))
         ) {
+            @Suppress("MagicNumber") // 0.5f stands for half of the screen
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
