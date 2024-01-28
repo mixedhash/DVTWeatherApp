@@ -6,7 +6,6 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
-    id("org.jetbrains.kotlinx.kover") version "0.7.5"
 }
 
 android {
