@@ -21,7 +21,7 @@ class LocationRepositoryImpl @Inject constructor(
 ) : LocationRepository {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override suspend fun getCurrentLocation(): Location? {
+    override suspend fun getCurrentLocation(): Pair<Double, Double>? {
         val hasAccessFineLocationPermission = ContextCompat.checkSelfPermission(
             application,
             android.Manifest.permission.ACCESS_FINE_LOCATION
@@ -48,7 +48,7 @@ class LocationRepositoryImpl @Inject constructor(
             fusedLocationProviderClient.lastLocation.apply {
                 if (isComplete) {
                     if (isSuccessful) {
-                        cont.resume(result) {} // Resume coroutine with location result
+                        cont.resume(Pair(result.latitude, result.longitude)) {} // Resume coroutine with location result
                     } else {
                         Timber.e(exception)
                         cont.resume(null) {} // Resume coroutine with null location result
@@ -56,7 +56,7 @@ class LocationRepositoryImpl @Inject constructor(
                     return@suspendCancellableCoroutine
                 }
                 addOnSuccessListener {
-                    cont.resume(it) {}  // Resume coroutine with location result
+                    cont.resume(Pair(result.latitude, result.longitude)) {}  // Resume coroutine with location result
                 }
                 addOnFailureListener {
                     Timber.e(it)

@@ -1,11 +1,10 @@
 package com.silosoft.technologies.dvtweatherapp
 
-import android.location.Location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.silosoft.technologies.dvtweatherapp.domain.repository.LocationRepository
 import com.silosoft.technologies.dvtweatherapp.domain.model.ForecastUiModel
 import com.silosoft.technologies.dvtweatherapp.domain.model.WeatherUiModel
+import com.silosoft.technologies.dvtweatherapp.domain.repository.LocationRepository
 import com.silosoft.technologies.dvtweatherapp.domain.usecase.GetForecastUseCase
 import com.silosoft.technologies.dvtweatherapp.domain.usecase.GetWeatherUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +20,7 @@ class MainViewModel @Inject constructor(
     private val forecastUseCase: GetForecastUseCase
 ) : ViewModel() {
 
-    val locationState: MutableStateFlow<Location?> = MutableStateFlow(null)
+    val locationState: MutableStateFlow<Pair<Double, Double>?> = MutableStateFlow(null)
     val weatherState: MutableStateFlow<WeatherUiModel?> = MutableStateFlow(null)
     val forecastState: MutableStateFlow<ForecastUiModel?> = MutableStateFlow(null)
     val displayErrorToast: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -33,8 +32,8 @@ class MainViewModel @Inject constructor(
     private fun getWeather() = locationState.value?.let { location ->
         viewModelScope.launch(Dispatchers.IO) {
             weatherState.value = weatherUseCase.execute(
-                lat = location.latitude.toString(),
-                lon = location.longitude.toString()
+                lat = location.first.toString(),
+                lon = location.second.toString()
             )
         }
     }
@@ -42,8 +41,8 @@ class MainViewModel @Inject constructor(
     private fun getForecast() = locationState.value?.let { location ->
         viewModelScope.launch(Dispatchers.IO) {
             forecastState.value = forecastUseCase.execute(
-                lat = location.latitude.toString(),
-                lon = location.longitude.toString()
+                lat = location.first.toString(),
+                lon = location.second.toString()
             )
         }
     }
