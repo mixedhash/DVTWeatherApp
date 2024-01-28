@@ -2,10 +2,14 @@ package com.silosoft.technologies.dvtweatherapp.domain.usecase
 
 import android.content.Context
 import android.widget.Toast
+import com.silosoft.technologies.dvtweatherapp.data.Result
 import com.silosoft.technologies.dvtweatherapp.domain.repository.OpenWeatherRepository
 import com.silosoft.technologies.dvtweatherapp.domain.ui_model.ForecastDay
 import com.silosoft.technologies.dvtweatherapp.domain.ui_model.ForecastUiModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale
 import javax.inject.Inject
@@ -17,22 +21,27 @@ class GetForecastUseCase @Inject constructor(
     suspend fun execute(lat: String, lon: String): ForecastUiModel? {
         val result = openWeatherRepository.getForecast(lat, lon)
         val forecastDays = mutableListOf<ForecastDay>()
-        if (result == null) {
-            Toast.makeText(context, "Something went wrong!", Toast.LENGTH_LONG).show()
-            return null
-        } else {
-            result.list.forEach { day ->
-                forecastDays.add(
-                    ForecastDay(
-                        dayOfWeek = convertToDayOfWeek(day.dtTxt),
-                        weatherType = day.weather[0].main,
-                        temp = day.main.temp.toInt()
+        return when (result) {
+            is Result.Success -> {
+                result.data.list.forEach { day ->
+                    forecastDays.add(
+                        ForecastDay(
+                            dayOfWeek = convertToDayOfWeek(day.dtTxt),
+                            weatherType = day.weather[0].main,
+                            temp = day.main.temp.toInt()
+                        )
                     )
-                )
+                }
+                ForecastUiModel(forecast = forecastDays)
+            }
+            is Result.Error -> {
+                Timber.e(result.error)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Something went wrong!", Toast.LENGTH_LONG).show()
+                }
+                null
             }
         }
-
-        return ForecastUiModel(forecast = forecastDays)
     }
 
     private fun convertToDayOfWeek(timestamp: String): String {

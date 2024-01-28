@@ -15,6 +15,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -45,11 +46,18 @@ class MainActivity : ComponentActivity() {
 
                 LaunchedEffect(key1 = locationPermissions.allPermissionsGranted) {
                     if (locationPermissions.allPermissionsGranted) {
-                        viewModel.getCurrentLocation()
+                        viewModel.getLocation()
                     }
                 }
 
-                val currentLocation = viewModel.currentLocation
+                val currentLocation = viewModel.locationState.collectAsState()
+
+                LaunchedEffect(key1 = currentLocation.value != null) {
+                    if (currentLocation.value != null) {
+                        viewModel.getWeather()?.join()
+                        viewModel.getForecast()?.join()
+                    }
+                }
 
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -70,8 +78,16 @@ class MainActivity : ComponentActivity() {
                                     val navController = rememberNavController()
 
                                     Scaffold(bottomBar = { BottomNavBar(navController) }) { paddings ->
-                                        if (currentLocation != null) {
-                                            NavigationHost(navController, paddings, currentLocation)
+                                        if (currentLocation.value != null) {
+                                            val weatherState = viewModel.weatherState.collectAsState()
+                                            val forecastState = viewModel.forecastState.collectAsState()
+
+                                            NavigationHost(
+                                                navHostController = navController,
+                                                paddingValues = paddings,
+                                                weatherState = weatherState.value,
+                                                forecastState = forecastState.value
+                                            )
                                         } else {
                                             Text(text = "Couldn't retrieve location, something went wrong!")
                                         }

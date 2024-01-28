@@ -2,6 +2,15 @@ package com.silosoft.technologies.dvtweatherapp
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
 
 @HiltAndroidApp
-class DVTWeatherApplication : Application()
+class DVTWeatherApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
+    }
+}

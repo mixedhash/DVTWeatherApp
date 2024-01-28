@@ -168,12 +168,10 @@ fun HomeScreen(
                             )
                         }
                     }
-
-                }
-
+                } ?: Text(text = "Couldn't fetch forecast data, something went wrong!")
             }
         }
-    }
+    } ?: Text(text = "Couldn't fetch weather data, something went wrong!")
 }
 
 @Composable

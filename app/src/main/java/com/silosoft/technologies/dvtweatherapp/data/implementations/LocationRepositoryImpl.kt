@@ -10,6 +10,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.silosoft.technologies.dvtweatherapp.domain.repository.LocationRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
+import timber.log.Timber
 import javax.inject.Inject
 
 // Inspired from here:
@@ -49,6 +50,7 @@ class LocationRepositoryImpl @Inject constructor(
                     if (isSuccessful) {
                         cont.resume(result) {} // Resume coroutine with location result
                     } else {
+                        Timber.e(exception)
                         cont.resume(null) {} // Resume coroutine with null location result
                     }
                     return@suspendCancellableCoroutine
@@ -57,6 +59,7 @@ class LocationRepositoryImpl @Inject constructor(
                     cont.resume(it) {}  // Resume coroutine with location result
                 }
                 addOnFailureListener {
+                    Timber.e(it)
                     cont.resume(null) {} // Resume coroutine with null location result
                 }
                 addOnCanceledListener {
