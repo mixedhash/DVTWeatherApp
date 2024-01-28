@@ -5,7 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("io.gitlab.arturbosch.detekt")
     id("com.google.dagger.hilt.android")
-    id ("com.google.devtools.ksp")
+    id("com.google.devtools.ksp")
     id("org.jetbrains.kotlinx.kover") version "0.7.5"
 }
 
@@ -72,6 +72,12 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    @Suppress("UnstableApiUsage")
+    testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+    }
 }
 
 dependencies {
@@ -126,6 +132,8 @@ dependencies {
 
     // Testing
     testImplementation("io.mockk:mockk:1.13.9")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+    testImplementation("com.squareup.okhttp3:okhttp:4.11.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.1")
 }
