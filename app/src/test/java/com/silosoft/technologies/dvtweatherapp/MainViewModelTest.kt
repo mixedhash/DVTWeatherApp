@@ -9,13 +9,7 @@ import com.silosoft.technologies.dvtweatherapp.domain.usecase.GetWeatherUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
@@ -27,21 +21,13 @@ class MainViewModelTest {
     private val mockGetWeatherUseCase = mockk<GetWeatherUseCase>()
     private val mockGetForecastUseCase = mockk<GetForecastUseCase>()
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @BeforeEach
     fun setup() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
         viewModel = MainViewModel(
             mockRepo,
             mockGetWeatherUseCase,
             mockGetForecastUseCase
         )
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @AfterEach
-    fun cleanup() {
-        Dispatchers.resetMain()
     }
 
     @Test
