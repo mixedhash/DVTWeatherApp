@@ -40,3 +40,12 @@ jobs:
 
     - name: Run Android Lint
       run: ./gradlew lint
+
+    - name: Generate Kover HTML reports
+      run: ./gradlew koverHtmlReport
+
+    - name: Upload reports
+      uses: actions/upload-artifact@v2
+      with:
+        name: kover-reports
+        path: app/build/reports/kover/html/
