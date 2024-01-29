@@ -6,6 +6,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
+    id("org.jetbrains.kotlinx.kover") version "0.6.0"
 }
 
 android {
@@ -75,6 +76,33 @@ android {
     testOptions {
         unitTests.all {
             it.useJUnitPlatform()
+        }
+    }
+    kover {
+        filters {
+            classes {
+                excludes += listOf(
+                    // Excluding Hilt generated files
+                    "dagger.hilt.internal.aggregatedroot.codegen.*",
+                    "hilt_aggregated_deps.*",
+                    "*ComposableSingletons*",
+                    "*_HiltModules*",
+                    "*Hilt_*",
+                    "*_Factory",
+                    "*InjectionModule_*",
+                    "*InjectionModule",
+                    // Application, Activity, BuildConfig
+                    "*DVTWeatherApplication",
+                    "*MainActivity*",
+                    "*BuildConfig",
+                    // Result wrapper, response data models, domain data models
+                    "*Result*",
+                    "*data.response.*",
+                    "*domain.model*",
+                    // Presentation layer
+                    "*presentation*"
+                )
+            }
         }
     }
 }
