@@ -3,13 +3,22 @@ package com.silosoft.technologies.dvtweatherapp
 import com.silosoft.technologies.dvtweatherapp.domain.model.ForecastDay
 import com.silosoft.technologies.dvtweatherapp.domain.model.ForecastUiModel
 import com.silosoft.technologies.dvtweatherapp.domain.model.WeatherUiModel
+import com.silosoft.technologies.dvtweatherapp.domain.repository.DataStoreRepository
 import com.silosoft.technologies.dvtweatherapp.domain.repository.LocationRepository
 import com.silosoft.technologies.dvtweatherapp.domain.usecase.GetForecastUseCase
 import com.silosoft.technologies.dvtweatherapp.domain.usecase.GetWeatherUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
@@ -20,14 +29,27 @@ class MainViewModelTest {
     private val mockRepo = mockk<LocationRepository>()
     private val mockGetWeatherUseCase = mockk<GetWeatherUseCase>()
     private val mockGetForecastUseCase = mockk<GetForecastUseCase>()
+    private val mockDataStoreRepository = mockk<DataStoreRepository>()
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @BeforeEach
     fun setup() {
+        Dispatchers.setMain(StandardTestDispatcher())
+
+        every { mockDataStoreRepository.getTimestamp() } returns flowOf("testTimestamp")
+
         viewModel = MainViewModel(
             mockRepo,
             mockGetWeatherUseCase,
-            mockGetForecastUseCase
+            mockGetForecastUseCase,
+            mockDataStoreRepository
         )
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @AfterEach
+    fun cleanup() {
+        Dispatchers.resetMain()
     }
 
     @Test
@@ -69,6 +91,7 @@ class MainViewModelTest {
         )
         viewModel.locationState.value = Pair(1.0, 1.0)
         coEvery { mockGetWeatherUseCase.execute(any(), any()) } returns fakeModel
+        every { mockDataStoreRepository.getTimestamp() } returns flowOf("testTimestamp")
 
         // Act
         viewModel.onEvent(MainViewModel.Event.OnFetchWeatherData)
@@ -83,6 +106,7 @@ class MainViewModelTest {
         // Arrange
         viewModel.locationState.value = Pair(1.0, 1.0)
         coEvery { mockGetWeatherUseCase.execute(any(), any()) } returns null
+        every { mockDataStoreRepository.getTimestamp() } returns flowOf("testTimestamp")
 
         // Act
         viewModel.onEvent(MainViewModel.Event.OnFetchWeatherData)
@@ -97,6 +121,7 @@ class MainViewModelTest {
         // Arrange
         viewModel.locationState.value = null
         coEvery { mockGetWeatherUseCase.execute(any(), any()) } returns mockk()
+        every { mockDataStoreRepository.getTimestamp() } returns flowOf("testTimestamp")
 
         // Act
         viewModel.onEvent(MainViewModel.Event.OnFetchWeatherData)
@@ -141,6 +166,7 @@ class MainViewModelTest {
 
         viewModel.locationState.value = Pair(1.0, 1.0)
         coEvery { mockGetForecastUseCase.execute(any(), any()) } returns fakeModel
+        every { mockDataStoreRepository.getTimestamp() } returns flowOf("testTimestamp")
 
         // Act
         viewModel.onEvent(MainViewModel.Event.OnFetchForecastData)
@@ -155,6 +181,7 @@ class MainViewModelTest {
         // Arrange
         viewModel.locationState.value = Pair(1.0, 1.0)
         coEvery { mockGetForecastUseCase.execute(any(), any()) } returns null
+        every { mockDataStoreRepository.getTimestamp() } returns flowOf("testTimestamp")
 
         // Act
         viewModel.onEvent(MainViewModel.Event.OnFetchForecastData)
@@ -169,6 +196,7 @@ class MainViewModelTest {
         // Arrange
         viewModel.locationState.value = null
         coEvery { mockGetForecastUseCase.execute(any(), any()) } returns mockk()
+        every { mockDataStoreRepository.getTimestamp() } returns flowOf("testTimestamp")
 
         // Act
         viewModel.onEvent(MainViewModel.Event.OnFetchForecastData)

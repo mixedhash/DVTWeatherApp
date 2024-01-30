@@ -17,6 +17,7 @@ import com.silosoft.technologies.dvtweatherapp.presentation.ui.screens.MapScreen
 fun NavigationHost(
     navHostController: NavHostController,
     paddingValues: PaddingValues,
+    timestampState: String,
     weatherState: WeatherUiModel?,
     forecastState: ForecastUiModel?
 
@@ -26,7 +27,13 @@ fun NavigationHost(
         navController = navHostController,
         startDestination = Screen.HomeScreen.route
     ) {
-        composable(Screen.HomeScreen.route) { HomeScreen(weatherState, forecastState) }
+        composable(Screen.HomeScreen.route) {
+            HomeScreen(
+                timestampState,
+                weatherState,
+                forecastState
+            )
+        }
         composable(Screen.FavouriteScreen.route) { FavouriteScreen() }
         composable(Screen.MapScreen.route) { MapScreen() }
     }

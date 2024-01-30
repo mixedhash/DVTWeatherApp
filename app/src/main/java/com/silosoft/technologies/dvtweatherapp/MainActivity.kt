@@ -84,10 +84,13 @@ class MainActivity : ComponentActivity() {
                                                 viewModel.weatherState.collectAsState()
                                             val forecastState =
                                                 viewModel.forecastState.collectAsState()
+                                            val timestampState =
+                                                viewModel.timestampState.collectAsState()
 
                                             NavigationHost(
                                                 navHostController = navController,
                                                 paddingValues = paddings,
+                                                timestampState = timestampState.value ?: "Not available",
                                                 weatherState = weatherState.value,
                                                 forecastState = forecastState.value
                                             )

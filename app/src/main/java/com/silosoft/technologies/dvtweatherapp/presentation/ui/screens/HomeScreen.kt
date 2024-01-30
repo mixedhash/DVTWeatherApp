@@ -36,6 +36,7 @@ import java.util.Locale
 
 @Composable
 fun HomeScreen(
+    timestamp: String,
     weatherUiModel: WeatherUiModel?,
     forecastUiModel: ForecastUiModel?
 ) {
@@ -170,6 +171,14 @@ fun HomeScreen(
                         }
                     }
                 } ?: Text(text = "Couldn't fetch forecast data, something went wrong!")
+                Text(
+                    text = "Last time updated: $timestamp",
+                    textAlign = TextAlign.Right,
+                    color = Color.White,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Light,
+                    modifier = Modifier.padding(start = 16.dp, top = 16.dp)
+                )
             }
         }
     } ?: Text(text = "Couldn't fetch weather data, something went wrong!")
@@ -239,6 +248,7 @@ private fun getBackgroundColor(weatherType: String) =
 @Composable
 fun HomeScreenPreview() {
     HomeScreen(
+        timestamp = "19:20 2024 01/23",
         weatherUiModel = WeatherUiModel(
             weatherType = "Clouds",
             currentTemp = 21,

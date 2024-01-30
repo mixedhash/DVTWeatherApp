@@ -90,7 +90,7 @@ android {
                     "*Hilt_*",
                     "*_Factory",
                     "*InjectionModule_*",
-                    "*InjectionModule",
+                    "*InjectionModule*",
                     // Application, Activity, BuildConfig
                     "*DVTWeatherApplication",
                     "*MainActivity*",
@@ -100,7 +100,10 @@ android {
                     "*data.response.*",
                     "*domain.model*",
                     // Presentation layer
-                    "*presentation*"
+                    "*presentation*",
+                    // DataStoreRepository and LocationRepository (Instrumentation test needed for these)
+                    "*DataStoreRepositoryImpl*",
+                    "*LocationRepositoryImpl*"
                 )
             }
         }
@@ -147,8 +150,8 @@ dependencies {
     // Accompanist
     implementation("com.google.accompanist:accompanist-permissions:0.34.0")
 
-    // Room
-    ksp("androidx.room:room-compiler:2.6.1")
+    // Preferences DataStore (SharedPreferences like APIs)
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // Timber for logging
     implementation("com.jakewharton.timber:timber:5.0.1")

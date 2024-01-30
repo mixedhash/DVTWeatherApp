@@ -4,12 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.silosoft.technologies.dvtweatherapp.domain.model.ForecastUiModel
 import com.silosoft.technologies.dvtweatherapp.domain.model.WeatherUiModel
+import com.silosoft.technologies.dvtweatherapp.domain.repository.DataStoreRepository
 import com.silosoft.technologies.dvtweatherapp.domain.repository.LocationRepository
 import com.silosoft.technologies.dvtweatherapp.domain.usecase.GetForecastUseCase
 import com.silosoft.technologies.dvtweatherapp.domain.usecase.GetWeatherUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,13 +19,23 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val locationRepository: LocationRepository,
     private val weatherUseCase: GetWeatherUseCase,
-    private val forecastUseCase: GetForecastUseCase
+    private val forecastUseCase: GetForecastUseCase,
+    private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
+
+    init {
+        viewModelScope.launch {
+            dataStoreRepository.getTimestamp().collectLatest {
+                timestampState.value = it
+            }
+        }
+    }
 
     val locationState: MutableStateFlow<Pair<Double, Double>?> = MutableStateFlow(null)
     val weatherState: MutableStateFlow<WeatherUiModel?> = MutableStateFlow(null)
     val forecastState: MutableStateFlow<ForecastUiModel?> = MutableStateFlow(null)
     val displayErrorToast: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val timestampState: MutableStateFlow<String?> = MutableStateFlow(null)
 
     private fun getLocation() = viewModelScope.launch(Dispatchers.IO) {
         locationState.value = locationRepository.getCurrentLocation()

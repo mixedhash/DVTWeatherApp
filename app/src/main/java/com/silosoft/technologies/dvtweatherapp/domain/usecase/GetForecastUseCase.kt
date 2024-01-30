@@ -15,13 +15,31 @@ class GetForecastUseCase @Inject constructor(
         val result = openWeatherRepository.getForecast(lat, lon)
         val forecastDays = mutableListOf<ForecastDay>()
         return when (result) {
+            // This will aggregate the 3 hours steps forecast into a daily forecast
+            // with an average temperature and most common weather type found for that day
             is Result.Success -> {
-                result.data.list.forEach { day ->
+                val groupedBySameDay = result.data.list.groupBy {
+                    it.dtTxt.convertToDayOfWeek()
+                }
+                groupedBySameDay.forEach { (dayOfWeek, threeHourDailyForecast) ->
+                    val averageTemperature =
+                        threeHourDailyForecast.map { it.main.temp.toInt() }.average().toInt()
+
+                    val weatherTypeCounter = HashMap<String, Int>()
+                    threeHourDailyForecast.forEach {
+                        weatherTypeCounter[it.weather[0].main] =
+                            weatherTypeCounter.getOrDefault(it.weather[0].main, 0) + 1
+                    }
+
+                    // Selects most common weather type, if all of them are unique, select the first one
+                    val mostCommonWeatherType = weatherTypeCounter.maxByOrNull { it.value }?.key
+                        ?: threeHourDailyForecast.first().weather[0].main
+
                     forecastDays.add(
                         ForecastDay(
-                            dayOfWeek = day.dtTxt.convertToDayOfWeek(),
-                            weatherType = day.weather[0].main,
-                            temp = day.main.temp.toInt()
+                            dayOfWeek = dayOfWeek,
+                            weatherType = mostCommonWeatherType,
+                            temp = averageTemperature
                         )
                     )
                 }
