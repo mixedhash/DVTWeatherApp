@@ -8,7 +8,7 @@ data class NearbySearchResponse(
     @Json(name = "html_attributions")
     val htmlAttributions: List<Any>,
     @Json(name = "next_page_token")
-    val nextPageToken: String,
+    val nextPageToken: String?,
     val results: List<Result>,
     val status: String
 )

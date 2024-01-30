@@ -272,6 +272,7 @@ class GetForecastUseCaseTest {
         // Act
         val result = useCase.execute("lat", "lon")
 
+        // Assert
         assertNotNull(result)
         assertEquals("Clouds", result?.forecast?.first()?.weatherType)
     }
@@ -394,6 +395,7 @@ class GetForecastUseCaseTest {
         // Act
         val result = useCase.execute("lat", "lon")
 
+        // Assert
         assertNotNull(result)
         assertEquals("Rain", result?.forecast?.first()?.weatherType)
     }

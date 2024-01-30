@@ -12,6 +12,6 @@ interface PlacesApi {
         @Query("key") key: String = BuildConfig.GOOGLE_MAPS_APIS_KEY,
         @Query("location") location: String,
         @Query("type") units: String = "restaurant",
-        @Query("radius") radius: String = "500"
+        @Query("radius") radius: String = "10000"
     ): Response<NearbySearchResponse>
 }

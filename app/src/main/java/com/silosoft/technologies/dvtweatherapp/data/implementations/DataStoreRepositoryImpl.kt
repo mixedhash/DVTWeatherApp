@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.silosoft.technologies.dvtweatherapp.data.response.forecast.ForecastResponse
+import com.silosoft.technologies.dvtweatherapp.data.response.nearbysearch.NearbySearchResponse
 import com.silosoft.technologies.dvtweatherapp.data.response.weather.WeatherResponse
 import com.silosoft.technologies.dvtweatherapp.domain.repository.DataStoreRepository
 import com.squareup.moshi.Moshi
@@ -19,6 +20,7 @@ import javax.inject.Inject
 private const val TIMESTAMP_PREFERENCES_KEY = "timestamp"
 private const val WEATHER_PREFERENCES_KEY = "weather"
 private const val FORECAST_PREFERENCES_KEY = "forecast"
+private const val NEARBY_SEARCH_PREFERENCES_KEY = "nearby"
 
 class DataStoreRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>,
@@ -27,6 +29,7 @@ class DataStoreRepositoryImpl @Inject constructor(
 
     private val weatherAdapter = moshi.adapter(WeatherResponse::class.java)
     private val forecastAdapter = moshi.adapter(ForecastResponse::class.java)
+    private val nearbySearchAdapter = moshi.adapter(NearbySearchResponse::class.java)
 
     override fun getTimestamp(): Flow<String> =
         dataStore.data.map { preferences ->
@@ -65,6 +68,21 @@ class DataStoreRepositoryImpl @Inject constructor(
         dataStore.data.map { preferences ->
             preferences[stringPreferencesKey(FORECAST_PREFERENCES_KEY)]?.let { forecastJson ->
                 forecastAdapter.fromJson(forecastJson)
+            }
+        }
+
+    override suspend fun storeNearbySearch(nearbySearchResponse: NearbySearchResponse) {
+        dataStore.edit { preferences ->
+            preferences[stringPreferencesKey(NEARBY_SEARCH_PREFERENCES_KEY)] =
+                nearbySearchAdapter.toJson(nearbySearchResponse)
+            preferences[stringPreferencesKey(TIMESTAMP_PREFERENCES_KEY)] = generateTimestamp()
+        }
+    }
+
+    override fun getNearbySearch(): Flow<NearbySearchResponse?> =
+        dataStore.data.map { preferences ->
+            preferences[stringPreferencesKey(NEARBY_SEARCH_PREFERENCES_KEY)]?.let { forecastJson ->
+                nearbySearchAdapter.fromJson(forecastJson)
             }
         }
 

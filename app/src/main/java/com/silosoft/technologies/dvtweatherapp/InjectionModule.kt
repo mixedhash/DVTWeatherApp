@@ -90,6 +90,7 @@ object InjectionModule {
     @Provides
     @Singleton
     fun providesNearbySearchRepository(
-        placesApi: PlacesApi
-    ): NearbySearchRepository = NearbySearchRepositoryImpl(placesApi)
+        placesApi: PlacesApi,
+        dataStoreRepository: DataStoreRepository
+    ): NearbySearchRepository = NearbySearchRepositoryImpl(placesApi, dataStoreRepository)
 }

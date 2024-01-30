@@ -181,7 +181,11 @@ fun HomeScreen(
                 )
             }
         }
-    } ?: Text(text = "Couldn't fetch weather data, something went wrong!")
+    } ?: Text(
+        text = "Couldn't fetch weather data, something went wrong!",
+        Modifier.fillMaxWidth(),
+        textAlign = TextAlign.Center
+    )
 }
 
 @Composable

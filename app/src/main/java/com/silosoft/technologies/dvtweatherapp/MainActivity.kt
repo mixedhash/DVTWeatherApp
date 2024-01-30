@@ -78,7 +78,12 @@ class MainActivity : ComponentActivity() {
                                 ) {
                                     val navController = rememberNavController()
 
-                                    Scaffold(bottomBar = { BottomNavBar(navController) }) { paddings ->
+                                    Scaffold(bottomBar = { BottomNavBar(navController) {
+                                        viewModel.onEvent(
+                                            MainViewModel.Event.OnNavigateToNearbyScreen
+                                        )
+                                    }
+                                    }) { paddings ->
                                         if (currentLocation.value != null) {
                                             val weatherState =
                                                 viewModel.weatherState.collectAsState()
@@ -86,13 +91,16 @@ class MainActivity : ComponentActivity() {
                                                 viewModel.forecastState.collectAsState()
                                             val timestampState =
                                                 viewModel.timestampState.collectAsState()
+                                            val nearbyRestaurantsState =
+                                                viewModel.nearbyRestaurantsState.collectAsState()
 
                                             NavigationHost(
                                                 navHostController = navController,
                                                 paddingValues = paddings,
                                                 timestampState = timestampState.value ?: "Not available",
                                                 weatherState = weatherState.value,
-                                                forecastState = forecastState.value
+                                                forecastState = forecastState.value,
+                                                nearbyRestaurantsState = nearbyRestaurantsState.value
                                             )
                                         } else {
                                             Text(text = "Couldn't retrieve location, something went wrong!")

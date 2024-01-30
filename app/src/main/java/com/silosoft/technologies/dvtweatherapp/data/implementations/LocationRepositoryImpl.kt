@@ -47,7 +47,8 @@ class LocationRepositoryImpl @Inject constructor(
             fusedLocationProviderClient.lastLocation.apply {
                 if (isComplete) {
                     if (isSuccessful) {
-                        cont.resume(Pair(result.latitude, result.longitude)) {} // Resume coroutine with location result
+                        // Resume coroutine with location result
+                        cont.resume(Pair(result.latitude, result.longitude)) {}
                     } else {
                         Timber.e(exception)
                         cont.resume(null) {} // Resume coroutine with null location result
@@ -55,7 +56,8 @@ class LocationRepositoryImpl @Inject constructor(
                     return@suspendCancellableCoroutine
                 }
                 addOnSuccessListener {
-                    cont.resume(Pair(result.latitude, result.longitude)) {}  // Resume coroutine with location result
+                    // Resume coroutine with location result
+                    cont.resume(it?.let { Pair(it.latitude, it.longitude) }) {}
                 }
                 addOnFailureListener {
                     Timber.e(it)

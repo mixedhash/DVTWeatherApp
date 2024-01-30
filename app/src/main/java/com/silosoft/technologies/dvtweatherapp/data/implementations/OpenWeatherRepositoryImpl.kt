@@ -41,7 +41,6 @@ class OpenWeatherRepositoryImpl @Inject constructor(
             val response = openWeatherApi.getForecast(lat = lat, lon = lon)
             if (response.isSuccessful) {
                 response.body()?.let { responseData ->
-                    Timber.d(responseData.toString())
                     dataStoreRepository.storeForecast(responseData)
                     Result.Success(responseData)
                 } ?: Result.Error(IOException("Response body is null"))

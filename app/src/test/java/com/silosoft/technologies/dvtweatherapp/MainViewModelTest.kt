@@ -2,10 +2,13 @@ package com.silosoft.technologies.dvtweatherapp
 
 import com.silosoft.technologies.dvtweatherapp.domain.model.ForecastDay
 import com.silosoft.technologies.dvtweatherapp.domain.model.ForecastUiModel
+import com.silosoft.technologies.dvtweatherapp.domain.model.NearbyRestaurantsUiModel
+import com.silosoft.technologies.dvtweatherapp.domain.model.Restaurant
 import com.silosoft.technologies.dvtweatherapp.domain.model.WeatherUiModel
 import com.silosoft.technologies.dvtweatherapp.domain.repository.DataStoreRepository
 import com.silosoft.technologies.dvtweatherapp.domain.repository.LocationRepository
 import com.silosoft.technologies.dvtweatherapp.domain.usecase.GetForecastUseCase
+import com.silosoft.technologies.dvtweatherapp.domain.usecase.GetNearbyRestaurantsUseCase
 import com.silosoft.technologies.dvtweatherapp.domain.usecase.GetWeatherUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -29,6 +32,7 @@ class MainViewModelTest {
     private val mockRepo = mockk<LocationRepository>()
     private val mockGetWeatherUseCase = mockk<GetWeatherUseCase>()
     private val mockGetForecastUseCase = mockk<GetForecastUseCase>()
+    private val mockGetNearbyRestaurantsUseCase = mockk<GetNearbyRestaurantsUseCase>()
     private val mockDataStoreRepository = mockk<DataStoreRepository>()
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -42,6 +46,7 @@ class MainViewModelTest {
             mockRepo,
             mockGetWeatherUseCase,
             mockGetForecastUseCase,
+            mockGetNearbyRestaurantsUseCase,
             mockDataStoreRepository
         )
     }
@@ -222,5 +227,29 @@ class MainViewModelTest {
 
         // Assert
         assertEquals(false, viewModel.displayErrorToast.value)
+    }
+
+    @Test
+    fun `execute onEvent for OnNavigateToNearbyScreen with location active`() = runTest {
+        // Arrange
+        viewModel.locationState.value = Pair(1.0, 1.0)
+        val fakeModel = NearbyRestaurantsUiModel(
+            listOf(
+                Restaurant(
+                    "Test shop",
+                    4.55,
+                    5332,
+                    vicinity = "Test street"
+                )
+            )
+        )
+        coEvery { mockGetNearbyRestaurantsUseCase.execute(any()) } returns fakeModel
+
+        // Act
+        viewModel.onEvent(MainViewModel.Event.OnNavigateToNearbyScreen)
+
+        // Assert
+        coVerify { mockGetNearbyRestaurantsUseCase.execute(any()) }
+        assertEquals(fakeModel, viewModel.nearbyRestaurantsState.value)
     }
 }

@@ -14,8 +14,6 @@ data class Result(
     @Json(name = "icon_mask_base_uri")
     val iconMaskBaseUri: String,
     val name: String,
-    @Json(name = "opening_hours")
-    val openingHours: OpeningHours?,
     @Json(name = "permanently_closed")
     val permanentlyClosed: Boolean?,
     val photos: List<Photo>,
@@ -23,8 +21,6 @@ data class Result(
     val placeId: String,
     @Json(name = "plus_code")
     val plusCode: PlusCode,
-    @Json(name = "price_level")
-    val priceLevel: Int,
     val rating: Double,
     val reference: String,
     val scope: String,

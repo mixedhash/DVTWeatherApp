@@ -1,6 +1,7 @@
 package com.silosoft.technologies.dvtweatherapp.domain.repository
 
 import com.silosoft.technologies.dvtweatherapp.data.response.forecast.ForecastResponse
+import com.silosoft.technologies.dvtweatherapp.data.response.nearbysearch.NearbySearchResponse
 import com.silosoft.technologies.dvtweatherapp.data.response.weather.WeatherResponse
 import kotlinx.coroutines.flow.Flow
 
@@ -10,4 +11,6 @@ interface DataStoreRepository {
     fun getWeather(): Flow<WeatherResponse?>
     suspend fun storeForecast(forecastResponse: ForecastResponse)
     fun getForecast(): Flow<ForecastResponse?>
+    fun getNearbySearch(): Flow<NearbySearchResponse?>
+    suspend fun storeNearbySearch(nearbySearchResponse: NearbySearchResponse)
 }

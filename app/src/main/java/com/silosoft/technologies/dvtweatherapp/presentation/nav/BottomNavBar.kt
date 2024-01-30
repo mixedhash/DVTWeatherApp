@@ -7,13 +7,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.silosoft.technologies.dvtweatherapp.presentation.Constants.FAVOURITE_BOTTOM_TAB_ROUTE
 import com.silosoft.technologies.dvtweatherapp.presentation.Constants.HOME_BOTTOM_TAB_ROUTE
-import com.silosoft.technologies.dvtweatherapp.presentation.Constants.MAP_BOTTOM_TAB_ROUTE
 import com.silosoft.technologies.dvtweatherapp.R
+import com.silosoft.technologies.dvtweatherapp.presentation.Constants.NEARBY_BOTTOM_TAB_ROUTE
 
 @Composable
-fun BottomNavBar(navController: NavController) {
+fun BottomNavBar(
+    navController: NavController,
+    onNavigateToNearbyScreen: () -> Unit
+) {
     NavigationBar {
         val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
         Screen.entries.forEach { screen ->
@@ -21,6 +23,7 @@ fun BottomNavBar(navController: NavController) {
                 selected = (currentRoute == screen.route),
                 onClick = {
                     if (currentRoute != screen.route) {
+                        if (screen.route == NEARBY_BOTTOM_TAB_ROUTE) onNavigateToNearbyScreen()
                         navController.navigate(screen.route) {
                             // Avoid multiple copies of the same destination
                             popUpTo(navController.graph.startDestinationId)
@@ -42,12 +45,7 @@ private fun BottomTabIcon(screen: Screen) =
             contentDescription = "Main screen icon"
         )
 
-        FAVOURITE_BOTTOM_TAB_ROUTE -> Icon(
-            painter = painterResource(id = R.drawable.bottom_tab_heart),
-            contentDescription = "Favourites screen icon"
-        )
-
-        MAP_BOTTOM_TAB_ROUTE -> Icon(
+        NEARBY_BOTTOM_TAB_ROUTE -> Icon(
             painter = painterResource(id = R.drawable.bottom_tab_maps),
             contentDescription = "Map screen icon"
         )

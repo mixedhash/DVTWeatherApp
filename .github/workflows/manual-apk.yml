@@ -20,6 +20,16 @@ jobs:
         OPEN_WEATHER_BASE_URL: ${{ secrets.OPEN_WEATHER_BASE_URL }}
       run: echo "OPEN_WEATHER_BASE_URL=${{ secrets.OPEN_WEATHER_BASE_URL }}" >> local.properties
 
+    - name: Load GOOGLE_MAPS_APIS_KEY from secrets
+      env:
+        OPEN_WEATHER_API_KEY: ${{ secrets.GOOGLE_MAPS_APIS_KEY }}
+      run: echo "GOOGLE_MAPS_APIS_KEY=${{ secrets.GOOGLE_MAPS_APIS_KEY }}" >> local.properties
+
+    - name: Load NEARBYSEARCH_BASE_URL from secrets
+      env:
+        NEARBYSEARCH_BASE_URL: ${{ secrets.NEARBYSEARCH_BASE_URL }}
+      run: echo "NEARBYSEARCH_BASE_URL=${{ secrets.NEARBYSEARCH_BASE_URL }}" >> local.properties
+
     - name: Cache Gradle packages
       uses: actions/cache@v2
       with:
