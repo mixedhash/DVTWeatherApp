@@ -37,7 +37,6 @@ class MainViewModel @Inject constructor(
     val locationState: MutableStateFlow<Pair<Double, Double>?> = MutableStateFlow(null)
     val weatherState: MutableStateFlow<WeatherUiModel?> = MutableStateFlow(null)
     val forecastState: MutableStateFlow<ForecastUiModel?> = MutableStateFlow(null)
-    val displayErrorToast: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val timestampState: MutableStateFlow<String?> = MutableStateFlow(null)
     val nearbyRestaurantsState: MutableStateFlow<NearbyRestaurantsUiModel?> = MutableStateFlow(null)
 
@@ -76,8 +75,6 @@ class MainViewModel @Inject constructor(
             is Event.OnFetchLocation -> getLocation()
             is Event.OnFetchWeatherData -> getWeather()
             is Event.OnFetchForecastData -> getForecast()
-            is Event.OnDisplayErrorToast -> displayErrorToast.value = true
-            is Event.OnDisplayErrorToastFinished -> displayErrorToast.value = false
             is Event.OnNavigateToNearbyScreen -> getNearbyRestaurants()
         }
     }
@@ -86,8 +83,6 @@ class MainViewModel @Inject constructor(
         data object OnFetchLocation : Event
         data object OnFetchWeatherData : Event
         data object OnFetchForecastData : Event
-        data object OnDisplayErrorToast : Event
-        data object OnDisplayErrorToastFinished : Event
         data object OnNavigateToNearbyScreen : Event
     }
 }

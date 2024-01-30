@@ -212,24 +212,6 @@ class MainViewModelTest {
     }
 
     @Test
-    fun `execute onEvent for OnDisplayErrorToast`() = runTest {
-        // Act
-        viewModel.onEvent(MainViewModel.Event.OnDisplayErrorToast)
-
-        // Assert
-        assertEquals(true, viewModel.displayErrorToast.value)
-    }
-
-    @Test
-    fun `execute onEvent for OnDisplayErrorToastFinished`() = runTest {
-        // Act
-        viewModel.onEvent(MainViewModel.Event.OnDisplayErrorToastFinished)
-
-        // Assert
-        assertEquals(false, viewModel.displayErrorToast.value)
-    }
-
-    @Test
     fun `execute onEvent for OnNavigateToNearbyScreen with location active`() = runTest {
         // Arrange
         viewModel.locationState.value = Pair(1.0, 1.0)

@@ -3,14 +3,15 @@ package com.silosoft.technologies.dvtweatherapp.data.implementations
 import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
 import android.location.LocationManager
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.silosoft.technologies.dvtweatherapp.domain.repository.LocationRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
-import timber.log.Timber
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 // Inspired from here:
 // https://medium.com/@daniel.atitienei/get-current-user-location-in-jetpack-compose-using-clean-architecture-android-6683abca66c9
@@ -19,7 +20,6 @@ class LocationRepositoryImpl @Inject constructor(
     private val fusedLocationProviderClient: FusedLocationProviderClient
 ) : LocationRepository {
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun getCurrentLocation(): Pair<Double, Double>? {
         val hasAccessFineLocationPermission = ContextCompat.checkSelfPermission(
             application,
@@ -43,30 +43,18 @@ class LocationRepositoryImpl @Inject constructor(
             return null
         }
 
-        return suspendCancellableCoroutine { cont ->
-            fusedLocationProviderClient.lastLocation.apply {
-                if (isComplete) {
-                    if (isSuccessful) {
-                        // Resume coroutine with location result
-                        cont.resume(Pair(result.latitude, result.longitude)) {}
-                    } else {
-                        Timber.e(exception)
-                        cont.resume(null) {} // Resume coroutine with null location result
-                    }
-                    return@suspendCancellableCoroutine
+
+        return suspendCancellableCoroutine { continuation ->
+            fusedLocationProviderClient.lastLocation
+                .addOnSuccessListener { location: Location? ->
+                    continuation.resume(location?.let { Pair(it.latitude, it.longitude) })
                 }
-                addOnSuccessListener {
-                    // Resume coroutine with location result
-                    cont.resume(it?.let { Pair(it.latitude, it.longitude) }) {}
+                .addOnFailureListener { exception ->
+                    continuation.resumeWithException(exception)
                 }
-                addOnFailureListener {
-                    Timber.e(it)
-                    cont.resume(null) {} // Resume coroutine with null location result
+                .addOnCanceledListener {
+                    continuation.cancel()
                 }
-                addOnCanceledListener {
-                    cont.cancel() // Cancel the coroutine
-                }
-            }
         }
     }
 }

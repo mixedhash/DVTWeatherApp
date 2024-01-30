@@ -28,6 +28,7 @@ fun BottomNavBar(
                             // Avoid multiple copies of the same destination
                             popUpTo(navController.graph.startDestinationId)
                             launchSingleTop = true
+                            restoreState = true
                         }
                     }
                 },
